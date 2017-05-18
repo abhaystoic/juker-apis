@@ -4,10 +4,14 @@
 var express  = require('express');
 var multer = require('multer');
 var fs = require('fs');
+var path = require('path');
 const cors = require('cors');
 var app = express();
 var port = 8081;
 var DIR = __dirname + '/file-hoster/';
+
+//Serving music files for web app
+app.use('/file-server', express.static(path.join(__dirname, 'file-hoster')));
 
 // load the routes
 require('./routes.js')(app, DIR);
@@ -24,7 +28,7 @@ var upload = multer({dest: DIR});
 app.use(function (req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
   res.setHeader('Access-Control-Allow-Methods', 'POST');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Headers', 'Access-Control-Allow-Origin,Content-Type,X_FILE_NAME');
   next();
 });
  

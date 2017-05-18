@@ -1,9 +1,13 @@
+const fs = require('fs');
+const fileServer = './file-hoster/';
+
 // expose the routes to our app with module.exports
 module.exports = function(app, uploadPath) {
 
 
     //Configurations
     app.post('/upload', function(req, res) {
+        console.log('reached post');
         if (!req.files){
             return res.status(400).send('No files were uploaded.');
         }
@@ -26,6 +30,14 @@ module.exports = function(app, uploadPath) {
         console.log('Bad request. Try POST.');
         console.log("PWD==", __dirname);
         res.send('Bad request. Try POST.');
+    });
+
+    app.get('/live-songs', function(req, res) {
+        let liveSongs = [];
+        fs.readdirSync(fileServer).forEach(file => {
+          liveSongs.push(file);
+        });
+        res.send(liveSongs);
     });
 
     app.get('/app/app.js', function(req, res) {
